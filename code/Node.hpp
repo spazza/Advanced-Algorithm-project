@@ -14,19 +14,19 @@ public:
      * Create a new node without edges 
      * @param value number representing the node
      **/
-    Node(int value);
+    Node(unsigned int value);
 
     /**
      * Get the value that characterizes this node
      * @return number representing the node
      **/
-    int getValue();
+    unsigned int getValue();
 
     /**
      * Set the value that characterizes this node
      * @param value number representing the node
      **/
-    void setValue(int value);
+    void setValue(unsigned int value);
 
     /**
      * Get the nodes that are adjacent to the current one
@@ -54,7 +54,7 @@ private:
     /**
      * Value that characterizes the node
      **/
-    int value;
+    unsigned int value;
 };
 
 #endif 

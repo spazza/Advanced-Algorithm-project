@@ -1,14 +1,14 @@
 #include "Node.hpp"
 
-Node::Node(int value) { 
+Node::Node(unsigned int value) { 
     this->value = value; 
 }
 
-int Node::getValue() {
+unsigned int Node::getValue() {
     return value;
 }
 
-void Node::setValue(int value) {
+void Node::setValue(unsigned int value) {
     this->value = value;
 }
 
@@ -17,7 +17,7 @@ std::vector<Node*>* Node::getAdjacentNodes() {
 }
 
 void Node::addEdge(Node *new_adjacent_node) {
-    if(std::find(adjacent_nodes.begin(), adjacent_nodes.end(), new_adjacent_node) != adjacent_nodes.end())
+    if(std::find(adjacent_nodes.begin(), adjacent_nodes.end(), new_adjacent_node) != adjacent_nodes.end() || new_adjacent_node->getValue() == value)
         return;
 
     adjacent_nodes.push_back(new_adjacent_node);

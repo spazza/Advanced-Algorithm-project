@@ -1,7 +1,9 @@
 CC = g++
 CFLAGS = -Wall -g 
-SRCDIR = ./code
 BOOSTDIR = /home/user/LLVM_STUFF/boost/boost_1_74_0
+BOOSTINC = -I $(BOOSTDIR)
+GRAPHDIR = ./code
+GRAPHINC = -I $(GRAPHDIR)
 TESTDIR = ./test/correctness/out_files
 TESTSOURCES = ./test/correctness/*.cpp
 
@@ -12,7 +14,7 @@ correctness:
 	for CPPFILE in $(TESTSOURCES) ; do \
 		echo Compiling: $$CPPFILE ; \
 		OBJ=$$(basename $$CPPFILE .cpp) ; \
-		$(CC) $(CFLAGS) -I $(BOOSTDIR) $$CPPFILE -o $(TESTDIR)/$$OBJ ; \
+		$(CC) $(CFLAGS) $(BOOSTINC) $(GRAPHINC) $(GRAPHDIR)/*.cpp $$CPPFILE -o $(TESTDIR)/$$OBJ ; \
 	done
 
 correctness_exec:

@@ -7,6 +7,13 @@
 struct Graph {
 public:
     /**
+     * Get the node corresponding to the value inserted as parameter
+     * @param value number which identifies the node
+     * @return pointer to the selected node, NULL pointer in case it is not found
+     **/
+    Node* getNode(unsigned int value);
+
+    /**
      * Add a new node to the graph
      * @param new_node pointer to the node to be added
      **/
@@ -23,12 +30,16 @@ public:
      * Get the number of nodes in the graph
      * @return integer number of nodes
      **/
-    int getDimension();
+    unsigned int getDimension();
 
     /**
      * Print the values of nodes in the graph
      **/
     void printGraph();
+
+    void fill_in();
+
+    ~Graph();
 
 private:
     /**
