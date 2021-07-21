@@ -1,51 +1,61 @@
 #ifndef GRAPH_H_
 #define GRAPH_H_
 
+#include <iostream>
+#include <list>
 #include <vector>
-#include "Node.hpp"
+#include <algorithm>
+
+using namespace std;
+
+struct Vertex {
+public:
+
+    unsigned int value;
+
+    Vertex() = default;
+
+    Vertex(unsigned int value);
+
+    void addAdjacentVertex(unsigned int vertex);
+
+    bool isAdjacent(unsigned int vertex);
+
+    void printAdjacentVertices();
+
+private:
+    list<unsigned int> adjVertices;   
+};
 
 struct Graph {
 public:
-    /**
-     * Get the node corresponding to the value inserted as parameter
-     * @param value number which identifies the node
-     * @return pointer to the selected node, NULL pointer in case it is not found
-     **/
-    Node* getNode(unsigned int value);
 
-    /**
-     * Add a new node to the graph
-     * @param new_node pointer to the node to be added
-     **/
-    void addNode(Node *new_node);
+    Graph() = default;
 
-    /**
-     * Add an edge between two nodes
-     * @param first_node pointer to the first node of the edge
-     * @param second_node pointer to the second node of the edge
-     **/
-    void addEdge(Node *first_node, Node *second_node);
+    Graph(list<unsigned int> const &vertices);
 
-    /**
-     * Get the number of nodes in the graph
-     * @return integer number of nodes
-     **/
-    unsigned int getDimension();
+    Graph(list<unsigned int> const &vertices, vector<unsigned int> const &sources, vector<unsigned int> const &destinations); 
+ 
+    void addVertex(unsigned int vertex);
 
-    /**
-     * Print the values of nodes in the graph
-     **/
+    void addEdge(unsigned int src, unsigned int dst);
+
+    unsigned int size();
+
+    list<Vertex>& getVertices();
+
+    bool isInTheGraph(unsigned int vertex);
+
+    void printVertices();
+
     void printGraph();
 
-    void fill_in();
-
-    ~Graph();
 
 private:
-    /**
-     * Vector of nodes inside the graph
-     **/
-    std::vector<Node*> nodes;
+
+    list<Vertex> vertices;
 };
+
+
 
 #endif
