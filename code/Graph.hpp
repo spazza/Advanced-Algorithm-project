@@ -1,61 +1,64 @@
 #ifndef GRAPH_H_
 #define GRAPH_H_
 
+#include "Vertex.hpp"
+#include "BijectionFunction.hpp"
+
 #include <iostream>
-#include <list>
 #include <vector>
 #include <algorithm>
+#include <iterator>
+#include <unordered_map>
+#include <random>
 
 using namespace std;
-
-struct Vertex {
-public:
-
-    unsigned int value;
-
-    Vertex() = default;
-
-    Vertex(unsigned int value);
-
-    void addAdjacentVertex(unsigned int vertex);
-
-    bool isAdjacent(unsigned int vertex);
-
-    void printAdjacentVertices();
-
-private:
-    list<unsigned int> adjVertices;   
-};
 
 struct Graph {
 public:
 
-    Graph() = default;
+    Graph();
 
-    Graph(list<unsigned int> const &vertices);
+    Graph(const vector<unsigned int> &vertices);
 
-    Graph(list<unsigned int> const &vertices, vector<unsigned int> const &sources, vector<unsigned int> const &destinations); 
+    Graph(const vector<unsigned int> &vertices, const vector<unsigned int> &sources, const vector<unsigned int> &destinations); 
  
     void addVertex(unsigned int vertex);
 
-    void addEdge(unsigned int src, unsigned int dst);
+    void addVertex(const Vertex &vertex);
+
+    void addEdge(unsigned int first, unsigned int second);
+
+    void addEdge(const Vertex &first, const Vertex &second);
 
     unsigned int size();
 
-    list<Vertex>& getVertices();
+    unsigned int edgeSize();
 
-    bool isInTheGraph(unsigned int vertex);
+    unordered_map<unsigned int, Vertex>& getVertices();
 
-    void printVertices();
+    bool isInside(unsigned int vertex);
+
+    bool isInside(const Vertex &vertex);
+
+    bool isConnected();
+
+    void connect();
 
     void printGraph();
 
+    void fill_in(BijectionFunction bijFunction);
+
+    void generateRandomGraph(unsigned int num_nodes);
+
+    void clear();
 
 private:
 
-    list<Vertex> vertices;
+    void DFS(unsigned int v, vector<pair<Vertex, bool>> &visited_vertices);
+
+    unordered_map<unsigned int, Vertex> vertices;
+
+    unsigned int numEdges;
 };
-
-
 
 #endif

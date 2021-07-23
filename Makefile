@@ -1,11 +1,17 @@
 CC = g++
-CFLAGS = -Wall -g 
+CFLAGS = -Wall -O3
 BOOSTDIR = /home/user/LLVM_STUFF/boost/boost_1_74_0
 BOOSTINC = -I $(BOOSTDIR)
 GRAPHDIR = ./code
 GRAPHINC = -I $(GRAPHDIR)
 TESTDIR = ./test/correctness/out_files
 TESTSOURCES = ./test/correctness/*.cpp
+PERFDIR = ./test/performance
+BENCHINC = -isystem ./benchmark/include -L ./benchmark/build/src -lbenchmark -lpthread
+
+unit_test:
+	$(CC) $(CFLAGS) $(BOOSTINC) $(GRAPHINC) $(GRAPHDIR)/*.cpp ./test/correctness/unit_test.cpp -o $(TESTDIR)/unit_test ; \
+	$(TESTDIR)/unit_test
 
 correctness:
 	if [ ! -d "$(TESTDIR)" ]; then \
@@ -22,6 +28,9 @@ correctness_exec:
 		echo Test executed: $$OBJFILE ; \
 		$$OBJFILE ; \
 	done
+
+performance:
+	$(CC) $(GRAPHDIR)/*.cpp $(PERFDIR)/fill_in_evaluation.cpp -o $(PERFDIR)/out_files/fill_in_evaluation  $(BENCHINC) $(GRAPHINC)
 
 clean:
 	rm -r $(TESTDIR)
