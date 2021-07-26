@@ -3,15 +3,18 @@
 
 #include "Vertex.hpp"
 #include "BijectionFunction.hpp"
+#include "RandomGraphGenerator.hpp"
+#include "Sets.hpp"
 
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <iterator>
 #include <unordered_map>
-#include <random>
 
 using namespace std;
+
+namespace CustomGraph {
 
 struct Graph {
 public:
@@ -48,17 +51,27 @@ public:
 
     void fill_in(BijectionFunction bijFunction);
 
-    void generateRandomGraph(unsigned int num_nodes);
+    vector<unsigned int> lex_p();
+
+    list<pair<unsigned int, unsigned int>> lex_m();
+
+    void generateRandomGraph(unsigned int num_vertices);
 
     void clear();
 
 private:
 
     void DFS(unsigned int v, vector<pair<Vertex, bool>> &visited_vertices);
+    
+    vector<unsigned int> sortByLabel(vector<unsigned int> unnemberded_vertices, unordered_map<unsigned int, float> label);
+
+    vector<unsigned int> getVerticesKeys();
 
     unordered_map<unsigned int, Vertex> vertices;
 
     unsigned int numEdges;
 };
+
+}
 
 #endif

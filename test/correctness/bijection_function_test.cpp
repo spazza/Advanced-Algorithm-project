@@ -6,6 +6,8 @@
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
 
+using namespace CustomGraph;
+
 BOOST_AUTO_TEST_CASE(Bijection_function_test) {
     vector<unsigned int> unorderedSet = {5, 11, 9, 23};
 

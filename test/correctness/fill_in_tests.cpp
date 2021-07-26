@@ -6,9 +6,11 @@
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
 
+using namespace CustomGraph;
+
 BOOST_AUTO_TEST_CASE(Cycle_graph) {
     vector<unsigned int> vertices = {7,11,5,9,20};
-    Graph g(vertices);
+    CustomGraph::Graph g(vertices);
 
     g.addEdge(7,5);
     g.addEdge(7,11);
@@ -32,7 +34,7 @@ BOOST_AUTO_TEST_CASE(Cycle_graph) {
 
 BOOST_AUTO_TEST_CASE(Sink_vertex_graph) {
     vector<unsigned int> vertices = {4,6,9,10};
-    Graph g(vertices);
+    CustomGraph::Graph g(vertices);
 
     g.addEdge(4,6);
     g.addEdge(4,9);
@@ -50,7 +52,7 @@ BOOST_AUTO_TEST_CASE(Sink_vertex_graph) {
 
 BOOST_AUTO_TEST_CASE(Chain_graph) {
     vector<unsigned int> vertices = {5,9,1,41,3};
-    Graph g(vertices);
+    CustomGraph::Graph g(vertices);
 
     g.addEdge(5,9);
     g.addEdge(9,1);

@@ -10,7 +10,7 @@ PERFDIR = ./test/performance
 BENCHINC = -isystem ./benchmark/include -L ./benchmark/build/src -lbenchmark -lpthread
 
 unit_test:
-	$(CC) $(CFLAGS) $(BOOSTINC) $(GRAPHINC) $(GRAPHDIR)/*.cpp ./test/correctness/unit_test.cpp -o $(TESTDIR)/unit_test ; \
+	$(CC) $(CFLAGS) $(BOOSTINC) $(GRAPHINC) $(GRAPHDIR)/*.cpp $(TESTSOURCES) ./test/correctness/unit_test.cpp -o $(TESTDIR)/unit_test ; \
 	$(TESTDIR)/unit_test
 
 correctness:
@@ -29,8 +29,11 @@ correctness_exec:
 		$$OBJFILE ; \
 	done
 
-performance:
-	$(CC) $(GRAPHDIR)/*.cpp $(PERFDIR)/fill_in_evaluation.cpp -o $(PERFDIR)/out_files/fill_in_evaluation  $(BENCHINC) $(GRAPHINC)
+performance_fill:
+	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(PERFDIR)/fill_in_evaluation.cpp -o $(PERFDIR)/out_files/fill_in_evaluation  $(BENCHINC) $(GRAPHINC) $(BOOSTINC)
+
+performance_lex_p:
+	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(PERFDIR)/lex_p_evaluation.cpp -o $(PERFDIR)/out_files/lex_p_evaluation $(BENCHINC) $(GRAPHINC) $(BOOSTINC)
 
 clean:
 	rm -r $(TESTDIR)

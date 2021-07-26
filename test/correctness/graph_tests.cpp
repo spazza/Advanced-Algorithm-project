@@ -11,13 +11,14 @@
 
 using namespace std;
 using namespace boost;
+using namespace CustomGraph;
 namespace bdata = boost::unit_test::data;
 
 const unsigned int graph_dimension[] = {0, 2, 3, 4, 32, 128, 256};
 
 BOOST_DATA_TEST_CASE(Vertex_insertion, bdata::make(graph_dimension), n) {
     srand(time(NULL));
-    Graph g_test;
+    CustomGraph::Graph g_test;
 
     vector<unsigned int> test_vertices;
     for(unsigned int i = 0; i < n; ++i) {
@@ -34,7 +35,7 @@ BOOST_DATA_TEST_CASE(Vertex_insertion, bdata::make(graph_dimension), n) {
 
 BOOST_DATA_TEST_CASE(Edge_insertion, bdata::make(graph_dimension), n) {
     srand(time(NULL));
-    Graph g_test;
+    CustomGraph::Graph g_test;
 
     for(unsigned int i = 0; i < n; ++i) {
         unsigned int temp_value = rand() % n;
@@ -71,7 +72,7 @@ BOOST_DATA_TEST_CASE(Edge_insertion, bdata::make(graph_dimension), n) {
 
 BOOST_AUTO_TEST_CASE(Remove_duplicated_nodes) {
     unsigned int duplicated_nodes = 5;
-    Graph g_test;
+    CustomGraph::Graph g_test;
 
     for(unsigned int i = 0; i < duplicated_nodes; ++i) {
         g_test.addVertex(1);
@@ -83,7 +84,7 @@ BOOST_AUTO_TEST_CASE(Remove_duplicated_nodes) {
 }
 
 BOOST_AUTO_TEST_CASE(No_auto_ring) {
-    Graph g_test;
+    CustomGraph::Graph g_test;
     g_test.addVertex(1);
     g_test.addEdge(1,1);
 
@@ -92,7 +93,7 @@ BOOST_AUTO_TEST_CASE(No_auto_ring) {
 }
 
 BOOST_AUTO_TEST_CASE(Connected_graph) {
-    Graph g_test;
+    CustomGraph::Graph g_test;
 
     g_test.addVertex(1);
     g_test.addVertex(2);
@@ -119,9 +120,10 @@ BOOST_AUTO_TEST_CASE(Connected_graph) {
 const unsigned int random_graph_dimension[] = {2, 4, 8, 128, 256, 1024};
 
 BOOST_DATA_TEST_CASE(Graph_random_creation, bdata::make(random_graph_dimension), n) {
-    Graph g;
+    CustomGraph::Graph g;
     g.generateRandomGraph(n);
 
     BOOST_TEST(g.isConnected());
     BOOST_TEST(g.size() == n);
 }
+

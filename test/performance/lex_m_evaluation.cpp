@@ -1,7 +1,7 @@
 #include <benchmark/benchmark.h>
 #include "Graph.hpp"
 
-static void BM_fill_in(benchmark::State& state) {
+static void BM_lex_p(benchmark::State& state) {
     CustomGraph::Graph g;   
     for(auto _ : state) {
         state.PauseTiming();
@@ -12,14 +12,16 @@ static void BM_fill_in(benchmark::State& state) {
             graphVerticesVector.push_back(v.first);
 
         BijectionFunction bj (graphVerticesVector);
+
+        unsigned int prev_edges = g.edgeSize();
         state.ResumeTiming();
         
-        g.fill_in(bj);
-        state.SetComplexityN(g.size() + g.edgeSize());
-    }   
+        g.lex_m();
+        state.SetComplexityN(g.size() * prev_edges);
+    }
 }
 
-BENCHMARK(BM_fill_in)->RangeMultiplier(2)->Range(2,128)->Complexity();
-BENCHMARK(BM_fill_in)->RangeMultiplier(2)->Range(2,128)->Complexity(benchmark::oN);
+BENCHMARK(BM_lex_p)->RangeMultiplier(2)->Range(2,2048)->Complexity();
+BENCHMARK(BM_lex_p)->RangeMultiplier(2)->Range(2,2048)->Complexity(benchmark::oNSquared);
 
 BENCHMARK_MAIN();
