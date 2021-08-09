@@ -1,12 +1,10 @@
-//#define BOOST_TEST_MODULE Bijection_function
-
 #include "Graph.hpp"
 
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/data/test_case.hpp>
-#include <boost/test/data/monomorphic.hpp>
+#include <boost/test/unit_test.hpp>
 
 using namespace CustomGraph;
+
+BOOST_AUTO_TEST_SUITE(Bijection_function_tests)
 
 BOOST_AUTO_TEST_CASE(Bijection_function_test) {
     vector<unsigned int> unorderedSet = {5, 11, 9, 23};
@@ -18,3 +16,5 @@ BOOST_AUTO_TEST_CASE(Bijection_function_test) {
         BOOST_TEST(b.alphaInverse(unorderedSet[i]) == i);
     }
 }
+
+BOOST_AUTO_TEST_SUITE_END()

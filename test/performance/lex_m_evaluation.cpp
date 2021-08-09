@@ -1,7 +1,7 @@
 #include <benchmark/benchmark.h>
 #include "Graph.hpp"
 
-static void BM_lex_p(benchmark::State& state) {
+static void BM_lex_m(benchmark::State& state) {
     CustomGraph::Graph g;   
     for(auto _ : state) {
         state.PauseTiming();
@@ -21,7 +21,7 @@ static void BM_lex_p(benchmark::State& state) {
     }
 }
 
-BENCHMARK(BM_lex_p)->RangeMultiplier(2)->Range(2,2048)->Complexity();
-BENCHMARK(BM_lex_p)->RangeMultiplier(2)->Range(2,2048)->Complexity(benchmark::oNSquared);
+//BENCHMARK(BM_lex_m)->RangeMultiplier(2)->Range(2,512)->Complexity();
+BENCHMARK(BM_lex_m)->RangeMultiplier(2)->Range(2,1024)->Complexity(benchmark::oNSquared);
 
 BENCHMARK_MAIN();

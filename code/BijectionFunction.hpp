@@ -21,7 +21,7 @@ public:
      * @brief Construct a new Bijection Function object that uses the input vertices as codomain of the bijection function.
      * @param vertices vector of vertices of a connected graph.
      */
-    BijectionFunction(vector<unsigned int> vertices);
+    BijectionFunction(vector<unsigned int> &vertices);
 
     /**
      * @brief Get the vertex associated to the real number in input

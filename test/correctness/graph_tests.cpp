@@ -1,8 +1,6 @@
-//#define BOOST_TEST_MODULE graph_tests
-
 #include "Graph.hpp"
 
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
 
@@ -13,6 +11,8 @@ using namespace std;
 using namespace boost;
 using namespace CustomGraph;
 namespace bdata = boost::unit_test::data;
+
+BOOST_AUTO_TEST_SUITE(Graph_tests)
 
 const unsigned int graph_dimension[] = {0, 2, 3, 4, 32, 128, 256};
 
@@ -127,3 +127,5 @@ BOOST_DATA_TEST_CASE(Graph_random_creation, bdata::make(random_graph_dimension),
     BOOST_TEST(g.size() == n);
 }
 
+
+BOOST_AUTO_TEST_SUITE_END()

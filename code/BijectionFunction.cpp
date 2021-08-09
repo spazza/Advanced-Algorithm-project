@@ -3,7 +3,7 @@
  * @brief Construct a new Bijection Function object that uses the input vertices as codomain of the bijection function.
  * @param vertices vector of vertices of a connected graph.
  */
-BijectionFunction::BijectionFunction(vector<unsigned int> vertices) {
+BijectionFunction::BijectionFunction(vector<unsigned int> &vertices) {
     for(unsigned int i = 0; i < vertices.size(); ++i) {
         alpha_[i] = vertices[i];
         alphaInverse_[vertices[i]] = i;

@@ -1,17 +1,17 @@
 CC = g++
-CFLAGS = -Wall -O3
+CFLAGS = -g -Wall
 BOOSTDIR = /home/user/LLVM_STUFF/boost/boost_1_74_0
 BOOSTINC = -I $(BOOSTDIR)
 GRAPHDIR = ./code
 GRAPHINC = -I $(GRAPHDIR)
-TESTDIR = ./test/correctness/out_files
+TESTDIR = ./test/correctness
 TESTSOURCES = ./test/correctness/*.cpp
 PERFDIR = ./test/performance
 BENCHINC = -isystem ./benchmark/include -L ./benchmark/build/src -lbenchmark -lpthread
 
 unit_test:
-	$(CC) $(CFLAGS) $(BOOSTINC) $(GRAPHINC) $(GRAPHDIR)/*.cpp $(TESTSOURCES) ./test/correctness/unit_test.cpp -o $(TESTDIR)/unit_test ; \
-	$(TESTDIR)/unit_test
+	$(CC) $(CFLAGS) $(BOOSTINC) $(GRAPHINC) $(GRAPHDIR)/*.cpp $(TESTSOURCES) -o $(TESTDIR)/out_files/unit_test ; \
+	$(TESTDIR)/out_files/unit_test
 
 correctness:
 	if [ ! -d "$(TESTDIR)" ]; then \
@@ -35,8 +35,11 @@ performance_fill:
 performance_lex_p:
 	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(PERFDIR)/lex_p_evaluation.cpp -o $(PERFDIR)/out_files/lex_p_evaluation $(BENCHINC) $(GRAPHINC) $(BOOSTINC)
 
+performance_lex_m:
+	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(PERFDIR)/lex_m_evaluation.cpp -o $(PERFDIR)/out_files/lex_m_evaluation $(BENCHINC) $(GRAPHINC) $(BOOSTINC)
+
 clean:
-	rm -r $(TESTDIR)
+	rm -r $(TESTDIR)/out_files
 
 
 

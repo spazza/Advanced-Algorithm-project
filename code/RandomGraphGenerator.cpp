@@ -1,25 +1,21 @@
 #include "RandomGraphGenerator.hpp"
 
+/**
+ * @brief Construct a new Random Graph Generator object that will have a number of vertices specified in the 
+ * first parameter.
+ * @param num_vertices integer that specifies the number of vertices of the random graph.
+ */
 RandomGraphGenerator::RandomGraphGenerator(unsigned int num_vertices) : num_vertices(num_vertices) {}
 
-vector<unsigned int> RandomGraphGenerator::getVertices() {
-    return vertices;
-}
-
-vector<unsigned int> RandomGraphGenerator::getEdgesSrc() {
-    return src_edges;
-}
-
-vector<unsigned int> RandomGraphGenerator::getEdgesDst() {
-    return dst_edges;
-}
-
+/**
+ * @brief Generate the random graph.
+ */
 void RandomGraphGenerator::generate() {
     random_device rd;
     mt19937 gen(rd());
+    // num of edges in the graph between (n-1) and (n*(n-1) / 2)
     uniform_int_distribution<> distr_edge(num_vertices-1, (num_vertices*(num_vertices-1))/2);
 
-    // num of edges in the graph between (n-1) and (n*(n-1) / 2)
     unsigned int num_edges = distr_edge(gen);
 
     boost::minstd_rand graph_gen;
@@ -41,8 +37,26 @@ void RandomGraphGenerator::generate() {
 }
 
 
-    
-    
-    
+/**
+ * @brief Get the Vertices that have been generated randomly.
+ * @return vector<unsigned int> that contains the vertices.
+ */
+vector<unsigned int>& RandomGraphGenerator::getVertices() {
+    return vertices;
+}
 
-    
+/**
+ * @brief Get the source of the vertices that have been generated randomly.
+ * @return vector<unsigned int> that contains the source of the edges.
+ */
+vector<unsigned int>& RandomGraphGenerator::getEdgesSrc() {
+    return src_edges;
+}
+
+/**
+ * @brief Get the destination of the vertices that have been generated randomly.
+ * @return vector<unsigned int> that contains the destination of the edges.
+ */
+vector<unsigned int>& RandomGraphGenerator::getEdgesDst() {
+    return dst_edges;
+}
