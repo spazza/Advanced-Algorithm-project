@@ -1,4 +1,4 @@
-#include "Graph.hpp"
+ #include "Graph.hpp"
 
 /**
  * @brief Construct a new empty Graph object.
@@ -176,9 +176,8 @@ void CustomGraph::Graph::DFS(unsigned int v, vector<pair<Vertex, bool>> &visited
 
 /**
  * @brief Fill-in is a function that starting from a graph creates an elimination graph.
- * The v-elimination graph is obtained by adding edges such that all vertices adjacent to v are pairwise adjacent
- * and then v is deleted and also its incident edges. Applying recursively this process for all the vertices of an ordered graph it
- * will produce the so called fill-in of the graph.
+ * Being v a vertex of the graph, the v-elimination graph is obtained by adding edges such that all vertices adjacent to v are pairwise 
+ * adjacent. Applying recursively this process for all the vertices of an ordered graph it will produce the so called fill-in of the graph.
  * The algorithm works in this way:
  * - For each i from 0 to n-1, n is the number of vertices in the graph, select a vertex v = alpha(i).
  * - Then select k that is the vertex u with the minimum alpha-1 such that v is monotonely adjacent to u.
@@ -207,9 +206,23 @@ void CustomGraph::Graph::fill_in(BijectionFunction &bijFunction) {
 }
 
 /**
- * @brief 
- * 
- * @return vector<unsigned int> 
+ * @brief Lex_p is a function that tries to find a perfect ordering inside a graph.
+ * Alpha is a perfect ordering if it's not necessary to add any other edge to eliminate the graph.
+ * The algorithm exploits a sort of breadth-first search, when a vertex is visited it passes to the successive
+ * order and a label is assigned to it.
+ * An ordering is produced in any case, even if it is not perfetct. In that case it's suggested to check it using the
+ * function fill-in.
+ * The algorithm works in this way:
+ * - All the vertices are inserted into sets(0)
+ * - For each i = n-1 until 0 
+ * -   Select a vertex v inside the set with highest index
+ * -   Delete the cell that contains v from the set
+ * -   Assign v to the order i
+ * -   For each vertex w adjacent to v that has not been ordered yet.
+ * -      Delete the cell of w from its set
+ * -      Move w in the set with the successive order, checking if it already existent
+ * -      Update the position of w
+ * @return vector<unsigned int> structure that contains the ordered vertices of the perfect ordering procedure.
  */
 vector<unsigned int> CustomGraph::Graph::lex_p() {
     vector<unsigned int> alphaInverse(vertices.size());
@@ -257,37 +270,37 @@ vector<unsigned int> CustomGraph::Graph::lex_p() {
     return alphaInverse;
 }
 
-list<pair<unsigned int, unsigned int>> CustomGraph::Graph::lex_m() {
-    list<pair<unsigned int, unsigned int>> g_alpha;
-    unordered_map<unsigned int, float> label;
-    unordered_set<unsigned int> reached;
-    vector<unsigned int> unnumberedVertices;
-    vector<unsigned int> alphaInverse(vertices.size());
+/*
 
-    for(auto it_v = vertices.begin(); it_v != vertices.end(); ++it_v) {
-        label[it_v->first] = 1;
-        unnumberedVertices.push_back(it_v->first);
+vector<unsigned int> CustomGraph::Graph::lex_m() {
+    vector<unsigned int> alphaInverse(vertices.size());
+    unordered_map<unsigned int, float> label;
+    vector<unsigned int> unnumberedVertices;
+
+    for(auto v = vertices.begin(); v != vertices.end(); ++v) {
+        label[v->first] = 1;
+        unnumberedVertices.push_back(v->first);
     }
         
     unsigned int k = 1;
 
-    unordered_map<unsigned int, list<unsigned int>> reach;
     for(int i = vertices.size(); i > 0; --i) {
         //pick an unnumbered vertex v with label(v) = k
-        unsigned int v;
-        for(auto it_v = vertices.begin(); it_v != vertices.end(); ++it_v) {
-            auto pos_it = find(unnumberedVertices.begin(), unnumberedVertices.end(), it_v->first);
-            if((pos_it != unnumberedVertices.end()) && label[it_v->first] == k) {
-                v = it_v->first;
-                unnumberedVertices.erase(pos_it);
-                break;
-            }
-        }
+        unsigned int v = unnumberedVertices[0];
 
-        //maybe useless
+        // delete the element that now is numbered
+        unnumberedVertices.erase(unnumberedVertices.begin());
+        label.erase(v);
+
+        // assign v the number i
         alphaInverse[i-1] = v;
 
-        reach.clear();
+        // Maybe I can use a vector instead of unordered_map
+        unordered_map<unsigned int, list<unsigned int>> reach;
+        unordered_set<unsigned int> reached;
+        reached.insert(alphaInverse.begin(), alphaInverse.end());
+
+        // Initialize the lists for each level j up to k
         for(unsigned int j = 1; j <= k; ++j)
             reach[j] = list<unsigned int>();
 
@@ -298,8 +311,8 @@ list<pair<unsigned int, unsigned int>> CustomGraph::Graph::lex_m() {
             if(find(unnumberedVertices.begin(), unnumberedVertices.end(), w) != unnumberedVertices.end()) {
                 reach[label[w]].push_back(w);
                 reached.insert(w);  
-                label[w] = label[w] + 0.5;
-                g_alpha.push_back(pair<unsigned int, unsigned int>(v,w));
+                label[w] +=  0.5;
+                addEdge(v,w);
             }
         }
 
@@ -311,57 +324,103 @@ list<pair<unsigned int, unsigned int>> CustomGraph::Graph::lex_m() {
 
                 for(auto it_z = vertices[w].getAdjVertices().begin(); it_z != vertices[w].getAdjVertices().end(); ++it_z) {
                     unsigned int z = *it_z;
-                    if(reached.find(z) == reached.end()) {
+                    if(reached.find(z) == reached.end()) { // also check for already numbered vertices
                         reached.insert(z);
                         
                         if(label[z] > j) {
                             reach[label[z]].push_back(z);
                             label[z] = label[z] + 0.5;
-                            g_alpha.push_back(pair<unsigned int, unsigned int>(v,z));
+                            addEdge(v,z);
                         } else
                             reach[j].push_back(z);
-                        
                     }
                 }
             }
         }
         //sort unnumbered vertices by label(w) value
-        sortByLabel(unnumberedVertices, label, &k);
+        vector<pair<unsigned int, float>> vertices_and_label(unnumberedVertices.size());
+        for(unsigned int ii = 0; ii <= unnumberedVertices.size(); ++ii)
+            vertices_and_label[ii] = make_pair(unnumberedVertices[ii], label[unnumberedVertices[ii]]);
+
+        k = CustomRadixSort::sortByLabel(vertices_and_label);
     }
-    return g_alpha;
-}
+    return alphaInverse;
+}*/
 
-void CustomGraph::Graph::sortByLabel(vector<unsigned int> &unnumberded_vertices, unordered_map<unsigned int, float> &label, unsigned int *k) {
-    unordered_set<float> different_k;
+vector<unsigned int> CustomGraph::Graph::lex_m() {
+    vector<unsigned int> alphaInverse(vertices.size());
+    vector<pair<unsigned int, float>> vertices_and_label(vertices.size());
 
-    for(unsigned int i = 0; i < unnumberded_vertices.size(); ++i) {
-        for(unsigned int j = 0; j < unnumberded_vertices.size(); ++j) 
-            if((label.find(unnumberded_vertices[i]) != label.end()) && (label.find(unnumberded_vertices[j]) != label.end())) 
-                if(label[unnumberded_vertices[i]] > label[unnumberded_vertices[j]]) {
-                    unsigned int temp = unnumberded_vertices[i];
-                    unnumberded_vertices[i] = unnumberded_vertices[j];
-                    unnumberded_vertices[j] = temp;
-                }
-    }
+    for(auto v = vertices.begin(); v != vertices.end(); ++v) 
+        vertices_and_label.push_back(make_pair(v->first, 1));
 
-    for(unsigned int i = 0; i < unnumberded_vertices.size(); ++i) 
-        if(different_k.find(label[unnumberded_vertices[i]]) == different_k.end()) 
-            different_k.insert(label[unnumberded_vertices[i]]);
+    unsigned int k = 1;
 
-    unsigned int new_k = different_k.size();
+    for(int i = vertices.size(); i > 0; --i) {
+        //pick an unnumbered vertex v with label(v) = k
+        unsigned int v = vertices_and_label[0].first;
 
-    float prev_k = label[unnumberded_vertices[0]] + 1;
-    for(unsigned int i = 0; i < unnumberded_vertices.size(); ++i) {
-        if(label[unnumberded_vertices[i]] != prev_k) {
-            prev_k = label[unnumberded_vertices[i]];
-            label[unnumberded_vertices[i]] = new_k;
-            new_k--;
-        } else {
-            label[unnumberded_vertices[i]] = label[unnumberded_vertices[i-1]];
+        // delete the element that now is numbered
+        vertices_and_label.erase(vertices_and_label.begin());
+
+        // assign v the number i
+        alphaInverse[i-1] = v;
+
+        // Maybe I can use a vector instead of unordered_map
+        unordered_map<unsigned int, list<unsigned int>> reach;
+        unordered_set<unsigned int> reached;
+        reached.insert(alphaInverse.begin(), alphaInverse.end());
+
+        // Initialize the lists for each level j up to k
+        for(unsigned int j = 1; j <= k; ++j)
+            reach[j] = list<unsigned int>();
+
+        //mark all unnumbered vertices unreached
+        for(auto it_w = vertices[v].getAdjVertices().begin(); it_w != vertices[v].getAdjVertices().end(); ++it_w) {
+            unsigned int w = *it_w;
+
+            auto it = find_if(vertices_and_label.begin(), vertices_and_label.end(), [w](pair<unsigned int, float> &p) {
+                return p.first = w;
+            });
+
+            if(it != vertices_and_label.end()) {
+                reach[it->second].push_back(w);
+                reached.insert(w);  
+                it->second +=  0.5;
+                addEdge(v,w);
+            }
         }
-    }
 
-    *k = different_k.size();
+        for(unsigned int j = 1; j <= k; ++j) {
+            while(reach[j].size() != 0) {
+                // delete a vertex w from reach(j)
+                unsigned int w = reach[j].front();
+                reach[j].pop_front();
+
+                for(auto it_z = vertices[w].getAdjVertices().begin(); it_z != vertices[w].getAdjVertices().end(); ++it_z) {
+                    unsigned int z = *it_z;
+                    if(reached.find(z) == reached.end()) { // also check for already numbered vertices
+                        reached.insert(z);
+
+                        auto it = find_if(vertices_and_label.begin(), vertices_and_label.end(), [z](pair<unsigned int, float> &p) {
+                            return p.first = z;
+                        });
+                        
+                        if(it->second > j) {
+                            reach[it->second].push_back(z);
+                            it->second += 0.5;
+                            addEdge(v,z);
+                        } else
+                            reach[j].push_back(z);
+                    }
+                }
+            }
+        }
+
+        //sort unnumbered vertices by label(w) value
+        k = CustomRadixSort::sortByLabel(vertices_and_label);
+    }
+    return alphaInverse;
 }
 
 /**
@@ -384,8 +443,8 @@ void CustomGraph::Graph::clear() {
 }
 
 /**
- * @brief Utility function used to create a random graph from scatch. It explois the Erdos-Renyi model for creation of
- * random connected graphs.
+ * @brief Utility function used to create a random graph from scratch. It exploits the Erdos-Renyi model for creation of
+ * random connected graphs, the only parameter specified is the number of vertices, the function will generate edges randomly.
  * @param num_vertices number of vertices that will compose the graph.
  */
 void CustomGraph::Graph::generateRandomGraph(unsigned int num_vertices) {
@@ -403,6 +462,12 @@ void CustomGraph::Graph::generateRandomGraph(unsigned int num_vertices) {
         addEdge(rg_edges_src[i], rg_edges_dst[i]);
 }
 
+/**
+ * @brief Utility function used to create a random graph from scratch. It exploits the Erdos-Renyi model for creation of
+ * random connected graphs, the input parameter indicates the sum between the number of vertices and the number of edges.
+ * The function will then produce a graph which sum between number of vertices and number of edges is equal to num_elements.
+ * @param num_elements number of elements in the graph, it is given by the sum of the number of vertices and the number of edges.
+ */
 void CustomGraph::Graph::generateRandomGraphPrecise(unsigned int num_elements) {
     typedef boost::adjacency_list<> Graph;
     typedef boost::erdos_renyi_iterator<boost::minstd_rand, Graph> ERGen;

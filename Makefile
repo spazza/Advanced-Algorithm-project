@@ -1,45 +1,44 @@
-CC = g++
-CFLAGS = -g -Wall
-BOOSTDIR = /home/user/LLVM_STUFF/boost/boost_1_74_0
-BOOSTINC = -I $(BOOSTDIR)
-GRAPHDIR = ./code
-GRAPHINC = -I $(GRAPHDIR)
-TESTDIR = ./test/correctness
-TESTSOURCES = ./test/correctness/*.cpp
-PERFDIR = ./test/performance
-BENCHINC = -isystem ./benchmark/include -L ./benchmark/build/src -lbenchmark -lpthread
+CC 			= g++
+CFLAGS 		= -g -Wall
+BOOSTDIR 	= /home/user/LLVM_STUFF/boost/boost_1_74_0 
+BOOSTINC 	= -I $(BOOSTDIR)
+GRAPHDIR 	= ./code
+GRAPHINC 	= -I $(GRAPHDIR)
+TESTDIR 	= ./test/unit_test
+TEMPDIR 	= ./test/temporal
+SPACEDIR	= ./test/spatial
+BENCHINC    = -isystem ./benchmark/include -L ./benchmark/build/src -lbenchmark -lpthread
+VALGRIND    = valgrind --tool=massif --stacks=yes --ignore-fn='generateRandomGraphPrecise(unsigned int)'
 
 unit_test:
-	$(CC) $(CFLAGS) $(BOOSTINC) $(GRAPHINC) $(GRAPHDIR)/*.cpp $(TESTSOURCES) -o $(TESTDIR)/out_files/unit_test ; \
+	$(CC) $(CFLAGS) $(BOOSTINC) $(GRAPHINC) $(GRAPHDIR)/*.cpp $(TESTDIR)/*.cpp -o $(TESTDIR)/out_files/unit_test ; \
 	$(TESTDIR)/out_files/unit_test
 
-correctness:
-	if [ ! -d "$(TESTDIR)" ]; then \
-		mkdir $(TESTDIR) ; \
-	fi
-	for CPPFILE in $(TESTSOURCES) ; do \
-		echo Compiling: $$CPPFILE ; \
-		OBJ=$$(basename $$CPPFILE .cpp) ; \
-		$(CC) $(CFLAGS) $(BOOSTINC) $(GRAPHINC) $(GRAPHDIR)/*.cpp $$CPPFILE -o $(TESTDIR)/$$OBJ ; \
-	done
+temporal_fill:
+	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(TEMPDIR)/fill_in_evaluation.cpp -o $(TEMPDIR)/out_files/fill_in_evaluation  $(BENCHINC) $(GRAPHINC) $(BOOSTINC) ; \
+	$(TEMPDIR)/out_files/fill_in_evaluation
 
-correctness_exec:
-	for OBJFILE in $(TESTDIR)/* ; do \
-		echo Test executed: $$OBJFILE ; \
-		$$OBJFILE ; \
-	done
+temporal_lex_p:
+	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(TEMPDIR)/lex_p_evaluation.cpp -o $(TEMPDIR)/out_files/lex_p_evaluation $(BENCHINC) $(GRAPHINC) $(BOOSTINC) ; \
+	$(TEMPDIR)/out_files/lex_p_evaluation
 
-performance_fill:
-	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(PERFDIR)/fill_in_evaluation.cpp -o $(PERFDIR)/out_files/fill_in_evaluation  $(BENCHINC) $(GRAPHINC) $(BOOSTINC)
+temporal_lex_m:
+	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(TEMPDIR)/lex_m_evaluation.cpp -o $(TEMPDIR)/out_files/lex_m_evaluation $(BENCHINC) $(GRAPHINC) $(BOOSTINC) ; \
+	$(TEMPDIR)/out_files/lex_m_evaluation
 
-performance_lex_p:
-	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(PERFDIR)/lex_p_evaluation.cpp -o $(PERFDIR)/out_files/lex_p_evaluation $(BENCHINC) $(GRAPHINC) $(BOOSTINC)
+spatial_fill:
+	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(SPACEDIR)/fill_in_evaluation.cpp -o $(SPACEDIR)/out_files/fill_in_evaluation $(GRAPHINC) $(BOOSTINC) ; \
+	$(VALGRIND) $(SPACEDIR)/out_files/fill_in_evaluation $(NUM_ELEMENTS)
 
-performance_lex_m:
-	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(PERFDIR)/lex_m_evaluation.cpp -o $(PERFDIR)/out_files/lex_m_evaluation $(BENCHINC) $(GRAPHINC) $(BOOSTINC)
+spatial_lex_p:
+	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(SPACEDIR)/lex_p_evaluation.cpp -o $(SPACEDIR)/out_files/lex_p_evaluation $(GRAPHINC) $(BOOSTINC) ; \
+	$(VALGRIND) $(SPACEDIR)/out_files/lex_p_evaluation $(NUM_ELEMENTS)
+
+spatial_lex_m:
+	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(SPACEDIR)/lex_m_evaluation.cpp -o $(SPACEDIR)/out_files/lex_m_evaluation $(GRAPHINC) $(BOOSTINC) ; \
+	$(VALGRIND) $(SPACEDIR)/out_files/lex_m_evaluation $(NUM_ELEMENTS)
 
 clean:
-	rm -r $(TESTDIR)/out_files
-
-
-
+	rm -r $(TESTDIR)/out_files/*
+	rm -r $(TEMPDIR)/out_files/*
+	rm -r $(SPACEDIR)/out_files/*
