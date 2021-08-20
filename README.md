@@ -26,29 +26,29 @@ To make the project work it's necessary to fix inside the makefile the BOOSTDIR 
 Unit tests:
 `make unit_test`
 
-Assess temporal complexity of fill_in function:
+Assess temporal complexity of fill_in function: <br/>
 `make temporal_fill`
 
-Similarly for the other functions:
-`make temporal_lex_p`
-`make temporal_lex_m`
+Similarly for the other functions: <br/>
+`make temporal_lex_p` <br/>
+`make temporal_lex_m` 
 
-Memory profiling
+Memory profiling <br/>
 It's mandatory to define a variable `NUM_ELEMENTS = x` that represents the sum between the number of vertices and the number of edges that will be contained in the graph.
 
-Profiling fill_in
+Profiling fill_in <br/>
 `make spatial_fill NUM_ELEMENTS = <elements>`
 
-Similarly for the other functions:
-`make spatial_lex_p NUM_ELEMENTS = <elements>`
-`make spatial_lex_m NUM_ELEMENTS = <elements>`
+Similarly for the other functions: <br/>
+`make spatial_lex_p NUM_ELEMENTS = <elements>` <br/>
+`make spatial_lex_m NUM_ELEMENTS = <elements>` 
 
-Example (fill_in)
+Example (fill_in) <br/>
 `make spatial_fill NUM_ELEMENTS = 128`
 
 The line above profiles the fill_in function that will have a number of elements equal to 128 (elements = num_vertices + num_edges).
 
-Clean the out files produced by the previous commands.
+Clean the out files produced by the previous commands. <br/>
 `make clear`
 
 
