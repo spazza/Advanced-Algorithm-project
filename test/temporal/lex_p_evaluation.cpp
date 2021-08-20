@@ -1,7 +1,7 @@
 #include <benchmark/benchmark.h>
 #include "Graph.hpp"
 
-// Performance evaluation of fill-in function
+// Performance evaluation of lex_p function
 // Results of this version are coherent with the expected ones, however I can control 
 // only the number of vertices and not the number of edges.
 

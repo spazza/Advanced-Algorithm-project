@@ -10,7 +10,7 @@ using namespace std;
 using namespace boost;
 namespace bdata = boost::unit_test::data;
 
-BOOST_AUTO_TEST_SUITE(Custom_radix_sort_test)
+BOOST_AUTO_TEST_SUITE(Custom_radix_sort_trivial_test)
 
 // Trivial test case to check correct ordering and correct label assignment.
 

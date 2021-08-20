@@ -116,9 +116,15 @@ public:
     bool isConnected();
 
     /**
-     * @brief In case there are some nodes in the graph that are not connected, connect them to the graph.
+     * @brief In case there are some nodes in the graph that are not connected, connect all consecutive nodes.
+     * To be used only in emergencyin the uncommon case when the random graph generation produces a non-connected graph.
      */
     void connect();
+
+    /**
+     * @brief Remove all the verticies and all the edges of the graph.
+     */
+    void clear();
 
     /**
      * @brief Print the adjacency list that is used to represent the graph.
@@ -160,12 +166,30 @@ public:
      */
     vector<unsigned int> lex_p();
 
-    vector<unsigned int> lex_m();
-
     /**
-     * @brief Remove all the verticies and all the edges of the graph.
+     * @brief Lex_m is a function that finds a minimal ordering inside a graph.
+     * Alpha is a minimal ordering if adding some edges I can eliminate the graph.
+     * The algorithm exploits a sort of breadth-first search and during the search each unnumbered vertex has an associated label
+     * that is updated at each visit based on the depth.
+     * The ordering produced is surely minimal, but it may not be minimum.
+     * The algorithm works in this way:
+     * - A label with value 1 is assigned to all vertices.
+     * - For each i = n-1 until 0 
+     * -    Select a vertex v with the highest label
+     * -    Assign v to the order i
+     * -    For each w adjacent to v
+     * -        Add it to the reached vertices at level l(w), mark w as reached, update its label
+     * -    For each label level j
+     * -        Delete a vertex w from the reached of label j
+     * -        For each z adjacent to w
+     * -            If label(z) is less than j
+     * -                Add z to the reached vertices at level l(z), update its label, add edge {v,z} to the graph
+     * -            Else
+     * -                Add z to the reached vertices at level j
+     * -    Sort unnumbered vertices by label value and redefine k appropriately               
+     * @return vector<unsigned int> structure that contains the ordered vertices of the minimal ordering procedure.
      */
-    void clear();
+    vector<unsigned int> lex_m();
     
     /**
      * @brief Utility function used to create a random graph from scratch. It exploits the Erdos-Renyi model for creation of

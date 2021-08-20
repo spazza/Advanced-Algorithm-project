@@ -9,7 +9,10 @@ namespace bdata = boost::unit_test::data;
 
 BOOST_AUTO_TEST_SUITE(Sets_tests)
 
-const unsigned int set_dimension[] = {0,1,2,4,10,100};
+const unsigned int set_dimension[] = {0, 1, 2, 4, 10, 100};
+
+// Check the correct initialization of the Set structure
+// In particular the position of the inside vertices.
 
 BOOST_DATA_TEST_CASE(Sets_initilization, bdata::make(set_dimension), n) {
     srand(time(NULL));
@@ -29,6 +32,9 @@ BOOST_DATA_TEST_CASE(Sets_initilization, bdata::make(set_dimension), n) {
     }
 }
 
+// Test the removal of a vertex in the set.
+// Only the position must be null.
+
 BOOST_AUTO_TEST_CASE(Remove_test) {
     std::unordered_set<unsigned int> vertices = {1, 2, 3, 4};
     Sets sets(vertices);
@@ -39,6 +45,9 @@ BOOST_AUTO_TEST_CASE(Remove_test) {
     BOOST_TEST(sets.getVertexPosition(1) != nullptr);
 }
 
+// Test the definitive removal of a vertex in the set.
+// Position have to be null and set size have to decrease.
+
 BOOST_AUTO_TEST_CASE(Remove_definitely_test) {
     std::unordered_set<unsigned int> vertices = {1, 2, 3, 4};
     Sets sets(vertices);
@@ -48,6 +57,8 @@ BOOST_AUTO_TEST_CASE(Remove_definitely_test) {
     BOOST_TEST(sets.size() == vertices.size()-1);
     BOOST_TEST(sets.getVertexPosition(1) == nullptr);
 }
+
+// Add a new set in a new position inside the structure.
 
 BOOST_AUTO_TEST_CASE(Add_set_test) {
     std::unordered_set<unsigned int> vertices = {1, 2, 3, 4};

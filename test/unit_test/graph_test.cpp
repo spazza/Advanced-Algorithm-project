@@ -16,6 +16,8 @@ BOOST_AUTO_TEST_SUITE(Graph_tests)
 
 const unsigned int graph_dimension[] = {0, 2, 3, 4, 32, 128, 256};
 
+// Test the correct insertion in the graph of new vertices.
+
 BOOST_DATA_TEST_CASE(Vertex_insertion, bdata::make(graph_dimension), n) {
     srand(time(NULL));
     CustomGraph::Graph g_test;
@@ -32,6 +34,8 @@ BOOST_DATA_TEST_CASE(Vertex_insertion, bdata::make(graph_dimension), n) {
         BOOST_TEST(g_test.getVertices()[test_vertices[i]].value == test_vertices[i]);
     
 }
+
+// Test the correct insertion in the graph of a new edge.
 
 BOOST_DATA_TEST_CASE(Edge_insertion, bdata::make(graph_dimension), n) {
     srand(time(NULL));
@@ -70,11 +74,13 @@ BOOST_DATA_TEST_CASE(Edge_insertion, bdata::make(graph_dimension), n) {
                     BOOST_TEST((*vertexIt).second.isAdjacent(dst_vertices[i]));
 }
 
-BOOST_AUTO_TEST_CASE(Remove_duplicated_nodes) {
-    unsigned int duplicated_nodes = 5;
+// Test the fact that in the graph there cannot be duplicated vertices.
+
+BOOST_AUTO_TEST_CASE(Remove_duplicated_vertices) {
+    unsigned int duplicated_vertices = 5;
     CustomGraph::Graph g_test;
 
-    for(unsigned int i = 0; i < duplicated_nodes; ++i) {
+    for(unsigned int i = 0; i < duplicated_vertices; ++i) {
         g_test.addVertex(1);
         g_test.addVertex(2);
         g_test.addVertex(3);
@@ -83,14 +89,20 @@ BOOST_AUTO_TEST_CASE(Remove_duplicated_nodes) {
     BOOST_TEST(g_test.size() == (unsigned int) 3);
 }
 
+// In the graph auto-ring are not allowed.
+
 BOOST_AUTO_TEST_CASE(No_auto_ring) {
     CustomGraph::Graph g_test;
     g_test.addVertex(1);
+    g_test.addVertex(2);
     g_test.addEdge(1,1);
+    g_test.addEdge(2,2);
 
     BOOST_TEST(g_test.edgeSize() == (unsigned int)0);
     BOOST_TEST(!g_test.getVertices()[1].isAdjacent(1));
 }
+
+// Check if the graph is connected or not.
 
 BOOST_AUTO_TEST_CASE(Connected_graph) {
     CustomGraph::Graph g_test;
@@ -117,7 +129,9 @@ BOOST_AUTO_TEST_CASE(Connected_graph) {
     BOOST_TEST(!g_test.isConnected());
 }
 
-const unsigned int random_graph_dimension[] = {2, 4, 8, 128, 256, 1024};
+const unsigned int random_graph_dimension[] = {8, 16, 32, 128, 256, 1024};
+
+// Check the correct random generation of graphs and that the main graph properites are verified.
 
 BOOST_DATA_TEST_CASE(Graph_random_creation, bdata::make(random_graph_dimension), n) {
     CustomGraph::Graph g;
@@ -125,7 +139,12 @@ BOOST_DATA_TEST_CASE(Graph_random_creation, bdata::make(random_graph_dimension),
 
     BOOST_TEST(g.isConnected());
     BOOST_TEST(g.size() == n);
-}
 
+    g.clear();
+
+    g.generateRandomGraphPrecise(n);
+
+    BOOST_TEST(g.isConnected());
+}
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -4,8 +4,6 @@
 
 using namespace CustomGraph;
 
-// Test suite for fill-in function.
-
 BOOST_AUTO_TEST_SUITE(Fill_in_tests)
 
 // Test case explained in the paper 
