@@ -1,6 +1,8 @@
 # Discarded folders and files
 /.vscode
-/test/correctness/out_files/*
-/test/performance/out_files/*
+/benchmark
+/test/temporal/out_files
+/test/spatial/out_files
+/test/unit_test/out_files
 
 

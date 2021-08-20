@@ -32,17 +32,17 @@ temporal_lex_m:
 	$(CC) $(GRAPHDIR)/*.cpp $(TEMPDIR)/lex_m_evaluation.cpp -o $(TEMPDIR)/out_files/lex_m_evaluation $(BENCHINC) $(GRAPHINC) $(BOOSTINC) ; 
 	$(TEMPDIR)/out_files/lex_m_evaluation
 
-# Profile the memory consumption of the function fill_in (Use NUM_ELEMETS = x to insert the number of elements in the graph, x positive integer)
+# Profile the memory consumption of the function fill_in (Use NUM_ELEMENTS = x to insert the number of elements in the graph, x positive integer)
 spatial_fill:
 	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(SPACEDIR)/fill_in_evaluation.cpp -o $(SPACEDIR)/out_files/fill_in_evaluation $(GRAPHINC) $(BOOSTINC) ; 
 	$(VALGRIND) $(SPACEDIR)/out_files/fill_in_evaluation $(NUM_ELEMENTS)
 
-# Profile the memory consumption of the function lex_p (Use NUM_ELEMETS = x to insert the number of elements in the graph, x positive integer)
+# Profile the memory consumption of the function lex_p (Use NUM_ELEMENTS = x to insert the number of elements in the graph, x positive integer)
 spatial_lex_p:
 	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(SPACEDIR)/lex_p_evaluation.cpp -o $(SPACEDIR)/out_files/lex_p_evaluation $(GRAPHINC) $(BOOSTINC) ; 
 	$(VALGRIND) $(SPACEDIR)/out_files/lex_p_evaluation $(NUM_ELEMENTS)
 
-# Profile the memory consumption of the function lex_m (Use NUM_ELEMETS = x to insert the number of elements in the graph, x positive integer)
+# Profile the memory consumption of the function lex_m (Use NUM_ELEMENTS = x to insert the number of elements in the graph, x positive integer)
 spatial_lex_m:
 	$(CC) $(CFLAGS) $(GRAPHDIR)/*.cpp $(SPACEDIR)/lex_m_evaluation.cpp -o $(SPACEDIR)/out_files/lex_m_evaluation $(GRAPHINC) $(BOOSTINC) ; 
 	$(VALGRIND) $(SPACEDIR)/out_files/lex_m_evaluation $(NUM_ELEMENTS)
