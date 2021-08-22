@@ -22,7 +22,7 @@ void Vertex::addAdjacentVertex(const Vertex &vertex) {
 }
 
 /**
- * @brief check if the input vertex is adjacent to the current one.
+ * @brief Check if the input vertex is adjacent to the current one.
  * @param vertex which adjacency must be check.
  * @return true if the input vertex is adjacent.
  * @return false if the input vertex is no adjacent.
@@ -32,7 +32,7 @@ bool Vertex::isAdjacent(unsigned int vertex) {
 }
 
 /**
- * @brief check if the input vertex is adjacent to the current one.
+ * @brief Check if the input vertex is adjacent to the current one.
  * @param vertex which adjacency must be check.
  * @return true if the input vertex is adjacent.
  * @return false if the input vertex is no adjacent.

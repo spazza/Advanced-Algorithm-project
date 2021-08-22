@@ -117,10 +117,10 @@ BOOST_AUTO_TEST_CASE(Sink_vertex_graph) {
     reverse(vertices.begin(), vertices.end());
     CustomGraph::Graph g2(vertices);
 
-    g1.addEdge(1,2);
-    g1.addEdge(1,3);
-    g1.addEdge(1,4);
-    g1.addEdge(1,5);
+    g2.addEdge(1,2);
+    g2.addEdge(1,3);
+    g2.addEdge(1,4);
+    g2.addEdge(1,5);
 
     prev_edges = g2.edgeSize();
     bij_vector = g2.lex_m();

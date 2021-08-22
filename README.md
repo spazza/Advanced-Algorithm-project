@@ -23,7 +23,7 @@ Other stuff folder contains the presentation and some collected data.
 
 To make the project work it's necessary to fix inside the makefile the BOOSTDIR and BENCHINC variables. More information can be found inside the makefile.
 
-Unit tests:
+Unit tests: <br/>
 `make unit_test`
 
 Assess temporal complexity of fill_in function: <br/>

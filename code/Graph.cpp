@@ -84,11 +84,35 @@ unsigned int CustomGraph::Graph::edgeSize() {
 }
 
 /**
+ * @brief Delete a vertex from the graph. Also edges that contains v are deleted.
+ * @param v vertex to be removed.
+ */
+void CustomGraph::Graph::deleteVertex(unsigned int v) {
+    for(auto &w : vertices)
+        if(w.second.isAdjacent(v)) {
+            w.second.getAdjVertices().erase(v);
+            numEdges--;
+        }
+    vertices.erase(v);
+}
+
+/**
  * @brief Get the Vertices object that bind values of the vertices to the corresponding object.
  * @return unordered_map<unsigned int, Vertex>& data structure that stores the vertices. 
  */
 unordered_map<unsigned int, Vertex>& CustomGraph::Graph::getVertices() {
     return vertices;
+}
+
+/**
+ * @brief Get the Vertices Keys object, extract them from the keys of the unordered map that represents the vertices.
+ * @return vector<unsigned int> array representations of the vertices in the graph.
+ */
+vector<unsigned int> CustomGraph::Graph::getVerticesKeys() {
+    vector<unsigned int> v_keys;
+    for(auto it = vertices.begin(); it != vertices.end(); ++it)
+        v_keys.push_back((*it).first);
+    return v_keys;
 }
 
 /**
@@ -372,17 +396,6 @@ vector<unsigned int> CustomGraph::Graph::lex_m() {
             k = CustomRadixSort::sortByLabel(vertices_and_label);
     }
     return alphaInverse;
-}
-
-/**
- * @brief Get the Vertices Keys object, extract them from the keys of the unordered map that represents the vertices.
- * @return vector<unsigned int> array representations of the vertices in the graph.
- */
-vector<unsigned int> CustomGraph::Graph::getVerticesKeys() {
-    vector<unsigned int> v_keys;
-    for(auto it = vertices.begin(); it != vertices.end(); ++it)
-        v_keys.push_back((*it).first);
-    return v_keys;
 }
 
 /**

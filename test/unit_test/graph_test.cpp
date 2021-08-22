@@ -129,6 +129,36 @@ BOOST_AUTO_TEST_CASE(Connected_graph) {
     BOOST_TEST(!g_test.isConnected());
 }
 
+// Check the correct elimination of a vertex 
+
+BOOST_AUTO_TEST_CASE(Delete_vertex) {
+    vector<unsigned int> vertices = {1,7,4,3,11};
+    CustomGraph::Graph g(vertices);
+
+    g.addEdge(1,7);
+    g.addEdge(1,4);
+    g.addEdge(1,3);
+    g.addEdge(7,3);
+    g.addEdge(7,11);
+    g.addEdge(4,11);
+    g.addEdge(3,11);
+
+    g.deleteVertex(1);
+
+    // Three edges should have been removed
+    BOOST_TEST(g.size() == vertices.size()-1);
+    BOOST_TEST(g.edgeSize() == (unsigned int)4);
+    for(auto v : g.getVertices()) 
+        BOOST_TEST(!(v.second.isAdjacent(1)));
+
+    g.deleteVertex(7);
+
+    BOOST_TEST(g.size() == vertices.size()-2);
+    BOOST_TEST(g.edgeSize() == (unsigned int)2);
+    for(auto v : g.getVertices()) 
+        BOOST_TEST(!(v.second.isAdjacent(7)));
+}
+
 const unsigned int random_graph_dimension[] = {8, 16, 32, 128, 256, 1024};
 
 // Check the correct random generation of graphs and that the main graph properites are verified.
