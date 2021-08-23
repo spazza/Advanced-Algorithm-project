@@ -10,8 +10,6 @@ Graph.hpp contains the three functions to be tested (fill_in, lex_p, lex_m) and 
 
 Test folder is divided into three sections. The unit_test folder contains files to verify the correct behaviour of the project. Temporal folder contains files to assess the temporal complexity of the project functions. Spatial folder contains files to profile the memory consumption of the project functions.
 
-Other stuff folder contains the presentation and some collected data.
-
 ## <ins> Requirements </ins>
 
 * BOOST (Version 1.74.0)
