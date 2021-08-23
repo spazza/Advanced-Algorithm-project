@@ -2,7 +2,7 @@
 #define VERTEX_H_
 
 #include <iostream>
-#include <set>
+#include <unordered_set>
 #include <algorithm>
 
 using namespace std;
@@ -65,7 +65,7 @@ public:
      * @brief Get the list of the adjacent vertices.
      * @return set<unsigned int>& vertices adjacent to the current one.
      */
-    set<unsigned int>& getAdjVertices();
+    unordered_set<unsigned int>& getAdjVertices();
 
     /**
      * @brief Compare two vertices, they are equal if they have the same value and the
@@ -85,7 +85,7 @@ private:
     /**
      * @brief set of vertices adjacent to the current one.
      */
-    set<unsigned int> adjVertices;   
+    unordered_set<unsigned int> adjVertices;   
 };
 
 #endif

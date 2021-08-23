@@ -56,6 +56,6 @@ void Vertex::printAdjacentVertices() {
  * @brief Get the list of the adjacent vertices.
  * @return set<unsigned int>& vertices adjacent to the current one.
  */
-set<unsigned int>& Vertex::getAdjVertices() {
+unordered_set<unsigned int>& Vertex::getAdjVertices() {
     return adjVertices;
 } 

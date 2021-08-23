@@ -25,7 +25,7 @@ BOOST_DATA_TEST_CASE(Fill_in_random_test, bdata::make(graph_dimension), n) {
 
     // Delete one node at time
     for(unsigned int i = 0; i < graph_vertices.size(); ++i) {
-        set<unsigned int> adj_vertices = g.getVertices()[bj.alpha(i)].getAdjVertices();
+        std::unordered_set<unsigned int> adj_vertices = g.getVertices()[bj.alpha(i)].getAdjVertices();
         g.deleteVertex(bj.alpha(i));
         
         // Check if the neighbours are pairwise adjacent.
@@ -58,7 +58,7 @@ BOOST_DATA_TEST_CASE(Lex_p_random_test, bdata::make(graph_dimension), n) {
 
         // Additional check, deleting a node all its neighbours must be pairwise adjacent.
         for(unsigned int i = 0; i < lex_p_vertices.size(); ++i) {
-            set<unsigned int> adj_vertices = g.getVertices()[bj.alpha(i)].getAdjVertices();
+            std::unordered_set<unsigned int> adj_vertices = g.getVertices()[bj.alpha(i)].getAdjVertices();
             g.deleteVertex(bj.alpha(i));
 
             // Check if the neighbours are pairwise adjacent.
@@ -79,24 +79,22 @@ BOOST_DATA_TEST_CASE(Lex_m_random_test, bdata::make(graph_dimension), n) {
     CustomGraph::Graph g;
     g.generateRandomGraphPrecise(n);
 
-    unsigned int prev_graph_edges_size = g.edgeSize();
     vector<unsigned int> lex_m_vertices = g.lex_m();
-    // Not necessary compute the fill_in, lex_m already add the edges.
 
-    if(g.edgeSize() == prev_graph_edges_size) {
-        // Deleting a node all its neighbours must be pairwise adjacent.
-        for(unsigned int i = 0; i < lex_m_vertices.size(); ++i) {
-            const unsigned int curr_vertex = lex_m_vertices[i];
-            set<unsigned int> adj_vertices = g.getVertices()[curr_vertex].getAdjVertices();
-            g.deleteVertex(curr_vertex);
+    BijectionFunction bj(lex_m_vertices);
+    g.fill_in(bj);
 
-            // Check if the neighbours are pairwise adjacent.
-            for(auto v : adj_vertices)
-                for(auto w : adj_vertices)
-                    if(v != w && g.isInside(v) && g.isInside(w))
-                        BOOST_TEST(g.getVertices()[v].isAdjacent(w));
-        }
-    }
+    // Deleting a node all its neighbours must be pairwise adjacent.
+    for(unsigned int i = 0; i < lex_m_vertices.size(); ++i) {
+        std::unordered_set<unsigned int> adj_vertices = g.getVertices()[bj.alpha(i)].getAdjVertices();
+        g.deleteVertex(bj.alpha(i));
+
+        // Check if the neighbours are pairwise adjacent.
+        for(auto v : adj_vertices)
+            for(auto w : adj_vertices)
+                if(v != w && g.isInside(v) && g.isInside(w))
+                    BOOST_TEST(g.getVertices()[v].isAdjacent(w));
+    }  
 }
 
 BOOST_AUTO_TEST_SUITE_END()
